@@ -17,6 +17,8 @@ export class AutoQuotationController {
     @Body() autoQuotationInputDto: AutoQuotationInputDto,
   ): Promise<any> {
     const result = await this.autoQuotationService.create(autoQuotationInputDto)
-    return result.data.data.users
+    console.log('result = ', result)
+
+    return result
   }
 }
