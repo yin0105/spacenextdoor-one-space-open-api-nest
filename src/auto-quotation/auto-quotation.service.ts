@@ -3,16 +3,18 @@ import { Injectable } from '@nestjs/common'
 import { NotFoundError } from '@space-next-door/onslib/dist/exceptions'
 import { graphQuery } from '@space-next-door/onslib/dist/graphql'
 import { lastValueFrom } from 'rxjs'
-import { AutoQuotationInputDto, CustomerDto } from './auto-quotation.dto'
 import {
   CREATE_QUOTATION,
+  INSERT_CONTACT,
+  INSERT_DEAL,
+} from '../graphql/mutation/auto-quotation.mutation'
+import {
   GET_CONTACT,
   GET_KANBAN_STAGE,
   GET_PROMOTION,
   GET_UNIT,
-  INSERT_CONTACT,
-  INSERT_DEAL,
-} from './gql'
+} from '../graphql/query/auto-quotation.query'
+import { AutoQuotationInputDto, CustomerDto } from './auto-quotation.dto'
 
 @Injectable()
 export class AutoQuotationService {
@@ -28,28 +30,6 @@ export class AutoQuotationService {
       }),
     )
   }
-
-  // async insertQuotationOne(
-  //   due_date: Date,
-  //   deal_id: number,
-  //   company_id: number,
-  //   building_id: number,
-  //   unit_subtype_id: number,
-  //   customer_id: number,
-  //   move_in_date: Date,
-  // ): Promise<any> {
-  //   const sql = {
-  //     query: `
-  //     mutation InsertQuotationOne {
-  //       insert_quotations_one(object: {due_date: "${due_date}", deal_id: "${deal_id}", company_id: "${company_id}", status: "PENDING", building_id: "${building_id}", unit_subtype_id: "${unit_subtype_id}", customer_id: "${customer_id}", move_in_date: "${move_in_date}"}) {
-  //         id
-  //       }
-  //     }
-  //     `,
-  //   }
-
-  //   return await this.sendPost(sql)
-  // }
 
   async create(autoQuotationInputDto: AutoQuotationInputDto): Promise<any> {
     const building_id: number = autoQuotationInputDto.building_id
