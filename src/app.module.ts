@@ -13,6 +13,7 @@ import { BookingModule } from './booking/booking.module'
 import { BuildingModule } from './building/building.module'
 import { CompanyModule } from './company/company.module'
 import { ApolloClientModule } from './graphql/apollo-client/apollo-client.module'
+import { SecretkeyMiddleware } from './secretkey.middleware'
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { ApolloClientModule } from './graphql/apollo-client/apollo-client.module
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // consumer.apply(SecretkeyMiddleware).forRoutes('building')
+    consumer.apply(SecretkeyMiddleware).forRoutes('building')
     consumer
       .apply(AutoquotationMiddleware)
       .forRoutes({ path: 'auto-quotation', method: RequestMethod.POST })
