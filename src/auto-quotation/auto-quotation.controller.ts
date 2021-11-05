@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Req } from '@nestjs/common'
+import { NotificationService } from '@space-next-door/onslib/dist/modules/notification'
 import { Request } from 'express'
 import { AutoQuotationInputDto } from './auto-quotation.dto'
 import { AutoQuotationService } from './auto-quotation.service'
@@ -16,8 +17,18 @@ export class AutoQuotationController {
   async create(
     @Body() autoQuotationInputDto: AutoQuotationInputDto,
   ): Promise<any> {
+    const notificationService = new NotificationService()
     const result = await this.autoQuotationService.create(autoQuotationInputDto)
-    console.log('result = ', result)
+
+    const args = {
+      subject: 'customSubject',
+      body: 'customBody',
+      attachments: null,
+    }
+    await notificationService.sendCustomEmail(
+      [autoQuotationInputDto.email],
+      args,
+    )
 
     return result
   }

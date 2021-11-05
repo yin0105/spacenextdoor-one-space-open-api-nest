@@ -157,8 +157,6 @@ export class AutoQuotationService {
     if (!result.data.insert_quotations_one)
       throw new NotFoundError('CREATE_QUOTATION_ERROR')
 
-    const quotation_id = result.data.insert_quotations_one.id
-
-    return quotation_id
+    throw new NotFoundError('CREATE_QUOTATION_ERROR')
   }
 }
