@@ -1,20 +1,20 @@
 export class AutoQuotationInputDto {
   username: string
   email: string
-  contactNumber: string
-  storeLocation: string
-  unitType: string
-  duration: string
-  leadOrigin: string
+  contact_number: string
+  building_id: number
+  unit_type_id: number
+  duration: number
+  lead_origin: string
   notes: string
 }
 
 export class CustomerDto {
   id: string
-  firstName: string
-  lastName: string
+  first_name: string
+  last_name: string
   email: string
-  contactNumber: string
-  leadOrigin: string
+  contact_number: string
+  lead_origin: string
   rentalPurpose: string
 }

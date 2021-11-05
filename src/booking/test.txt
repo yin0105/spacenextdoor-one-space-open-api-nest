@@ -13,7 +13,7 @@ mutation MyMutation {
       email: "marghoob@gmail.com", 
       first_name: "marghjob", 
       image_url: "http://local.com", 
-      last_name: "lastname", 
+      last_name: "last_name", 
       lead_origin: "pakistanp", 
       rental_purpose: "rental purpose", 
       show_id: "10", 

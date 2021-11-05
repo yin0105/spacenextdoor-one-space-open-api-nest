@@ -44,7 +44,7 @@ export type Scalars = {
 export type AccountsReceiveableResp = {
   __typename?: 'AccountsReceiveableResp'
   begining_balance?: Maybe<Scalars['Int']>
-  buildingId: Scalars['Int']
+  building_id: Scalars['Int']
   company?: Maybe<Scalars['String']>
   dLease?: Maybe<Scalars['timestamptz']>
   dmoveOutDate?: Maybe<Scalars['timestamptz']>
@@ -170,7 +170,7 @@ export enum PromotionBuyTypes {
 
 export type ReceiptDetailsResp = {
   __typename?: 'ReceiptDetailsResp'
-  buildingId: Scalars['Int']
+  building_id: Scalars['Int']
   chargeId: Scalars['Int']
   dRcpt: Scalars['timestamptz']
   dcPmtAmt: Scalars['Int']
@@ -198,7 +198,7 @@ export type RequestTerminationResp = {
 export type SecurityDepositLiabilitiesResp = {
   __typename?: 'SecurityDepositLiabilitiesResp'
   beginning_balance?: Maybe<Scalars['Int']>
-  buildingId: Scalars['Int']
+  building_id: Scalars['Int']
   company?: Maybe<Scalars['String']>
   deposit_charges?: Maybe<Scalars['Int']>
   ending_balance?: Maybe<Scalars['Int']>
@@ -269,14 +269,14 @@ export type TerminationUpdatePayload = {
 
 export type UnitHistoryResp = {
   __typename?: 'UnitHistoryResp'
-  buildingId: Scalars['Int']
+  building_id: Scalars['Int']
   city?: Maybe<Scalars['String']>
   company?: Maybe<Scalars['String']>
   country?: Maybe<Scalars['String']>
   dateIn?: Maybe<Scalars['timestamptz']>
   dateOut?: Maybe<Scalars['timestamptz']>
-  firstName?: Maybe<Scalars['String']>
-  lastName?: Maybe<Scalars['String']>
+  first_name?: Maybe<Scalars['String']>
+  last_name?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   phone?: Maybe<Scalars['String']>
   street?: Maybe<Scalars['String']>
@@ -4259,7 +4259,7 @@ export enum Bookings_Promotions_Customer_Buys_Select_Column {
   /** column name */
   BookingPromotionId = 'booking_promotion_id',
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -4356,7 +4356,7 @@ export enum Bookings_Promotions_Customer_Buys_Update_Column {
   /** column name */
   BookingPromotionId = 'booking_promotion_id',
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -5256,9 +5256,9 @@ export enum Bookings_Select_Column {
   /** column name */
   BuildingContactName = 'building_contact_name',
   /** column name */
-  BuildingContactNumber = 'building_contact_number',
+  Buildingcontact_number = 'building_contact_number',
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   BuildingName = 'building_name',
   /** column name */
@@ -5686,9 +5686,9 @@ export enum Bookings_Update_Column {
   /** column name */
   BuildingContactName = 'building_contact_name',
   /** column name */
-  BuildingContactNumber = 'building_contact_number',
+  Buildingcontact_number = 'building_contact_number',
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   BuildingName = 'building_name',
   /** column name */
@@ -6250,7 +6250,7 @@ export type Building_Taxes_Pk_Columns_Input = {
 /** select columns of table "building_taxes" */
 export enum Building_Taxes_Select_Column {
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CompanyId = 'company_id',
   /** column name */
@@ -6367,7 +6367,7 @@ export type Building_Taxes_Sum_Order_By = {
 /** update columns of table "building_taxes" */
 export enum Building_Taxes_Update_Column {
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CompanyId = 'company_id',
   /** column name */
@@ -6851,7 +6851,7 @@ export enum Buildings_Select_Column {
   /** column name */
   ContactName = 'contact_name',
   /** column name */
-  ContactNumber = 'contact_number',
+  contact_number = 'contact_number',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -6955,7 +6955,7 @@ export enum Buildings_Update_Column {
   /** column name */
   ContactName = 'contact_name',
   /** column name */
-  ContactNumber = 'contact_number',
+  contact_number = 'contact_number',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -8014,7 +8014,7 @@ export enum Companies_Select_Column {
   /** column name */
   ContactName = 'contact_name',
   /** column name */
-  ContactNumber = 'contact_number',
+  contact_number = 'contact_number',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -8113,7 +8113,7 @@ export enum Companies_Update_Column {
   /** column name */
   ContactName = 'contact_name',
   /** column name */
-  ContactNumber = 'contact_number',
+  contact_number = 'contact_number',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -9859,21 +9859,21 @@ export enum Customers_Select_Column {
   /** column name */
   CompanyId = 'company_id',
   /** column name */
-  ContactNumber = 'contact_number',
+  contact_number = 'contact_number',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Email = 'email',
   /** column name */
-  FirstName = 'first_name',
+  first_name = 'first_name',
   /** column name */
   Id = 'id',
   /** column name */
   ImageUrl = 'image_url',
   /** column name */
-  LastName = 'last_name',
+  last_name = 'last_name',
   /** column name */
-  LeadOrigin = 'lead_origin',
+  lead_origin = 'lead_origin',
   /** column name */
   RentalPurpose = 'rental_purpose',
   /** column name */
@@ -9972,21 +9972,21 @@ export enum Customers_Update_Column {
   /** column name */
   CompanyId = 'company_id',
   /** column name */
-  ContactNumber = 'contact_number',
+  contact_number = 'contact_number',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
   Email = 'email',
   /** column name */
-  FirstName = 'first_name',
+  first_name = 'first_name',
   /** column name */
   Id = 'id',
   /** column name */
   ImageUrl = 'image_url',
   /** column name */
-  LastName = 'last_name',
+  last_name = 'last_name',
   /** column name */
-  LeadOrigin = 'lead_origin',
+  lead_origin = 'lead_origin',
   /** column name */
   RentalPurpose = 'rental_purpose',
   /** column name */
@@ -10886,7 +10886,7 @@ export enum Floors_Select_Column {
   /** column name */
   BoxesJson = 'boxes_json',
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -10981,7 +10981,7 @@ export enum Floors_Update_Column {
   /** column name */
   BoxesJson = 'boxes_json',
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -16027,7 +16027,7 @@ export type Promotions_Customer_Buys_Pk_Columns_Input = {
 /** select columns of table "promotions_customer_buys" */
 export enum Promotions_Customer_Buys_Select_Column {
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -16124,7 +16124,7 @@ export type Promotions_Customer_Buys_Sum_Order_By = {
 /** update columns of table "promotions_customer_buys" */
 export enum Promotions_Customer_Buys_Update_Column {
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -22397,7 +22397,7 @@ export enum Unit_Subtypes_Select_Column {
   /** column name */
   Area = 'area',
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -22417,7 +22417,7 @@ export enum Unit_Subtypes_Select_Column {
   /** column name */
   TotalUnits = 'total_units',
   /** column name */
-  UnitTypeId = 'unit_type_id',
+  unit_type_id = 'unit_type_id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -22571,7 +22571,7 @@ export enum Unit_Subtypes_Update_Column {
   /** column name */
   Area = 'area',
   /** column name */
-  BuildingId = 'building_id',
+  building_id = 'building_id',
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
@@ -22591,7 +22591,7 @@ export enum Unit_Subtypes_Update_Column {
   /** column name */
   TotalUnits = 'total_units',
   /** column name */
-  UnitTypeId = 'unit_type_id',
+  unit_type_id = 'unit_type_id',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -22893,7 +22893,7 @@ export enum Unit_Type_Features_Select_Column {
   /** column name */
   UnitFeatureId = 'unit_feature_id',
   /** column name */
-  UnitTypeId = 'unit_type_id',
+  unit_type_id = 'unit_type_id',
   /** column name */
   UpdatedAt = 'updated_at',
 }
@@ -22976,7 +22976,7 @@ export enum Unit_Type_Features_Update_Column {
   /** column name */
   UnitFeatureId = 'unit_feature_id',
   /** column name */
-  UnitTypeId = 'unit_type_id',
+  unit_type_id = 'unit_type_id',
   /** column name */
   UpdatedAt = 'updated_at',
 }
@@ -24531,13 +24531,13 @@ export enum Users_Select_Column {
   /** column name */
   Email = 'email',
   /** column name */
-  FirstName = 'first_name',
+  first_name = 'first_name',
   /** column name */
   Id = 'id',
   /** column name */
   ImageUrl = 'image_url',
   /** column name */
-  LastName = 'last_name',
+  last_name = 'last_name',
   /** column name */
   PhoneNumber = 'phone_number',
   /** column name */
@@ -24621,13 +24621,13 @@ export enum Users_Update_Column {
   /** column name */
   Email = 'email',
   /** column name */
-  FirstName = 'first_name',
+  first_name = 'first_name',
   /** column name */
   Id = 'id',
   /** column name */
   ImageUrl = 'image_url',
   /** column name */
-  LastName = 'last_name',
+  last_name = 'last_name',
   /** column name */
   PhoneNumber = 'phone_number',
   /** column name */
