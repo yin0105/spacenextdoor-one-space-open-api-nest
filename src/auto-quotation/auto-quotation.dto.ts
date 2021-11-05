@@ -16,5 +16,5 @@ export class CustomerDto {
   email: string
   contact_number: string
   lead_origin: string
-  rentalPurpose: string
+  rental_purpose: string
 }

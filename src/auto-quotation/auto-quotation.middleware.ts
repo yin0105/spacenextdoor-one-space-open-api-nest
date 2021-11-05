@@ -23,7 +23,6 @@ export class AutoquotationMiddleware implements NestMiddleware {
       !lead_origin ||
       !notes
     ) {
-      console.log('hey, here is middleware')
       throw new BadRequestException()
     }
     next()

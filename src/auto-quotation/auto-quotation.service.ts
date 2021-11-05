@@ -1,7 +1,18 @@
 import { HttpService } from '@nestjs/axios'
 import { Injectable } from '@nestjs/common'
+import { NotFoundError } from '@space-next-door/onslib/dist/exceptions'
+import { graphQuery } from '@space-next-door/onslib/dist/graphql'
 import { lastValueFrom } from 'rxjs'
 import { AutoQuotationInputDto, CustomerDto } from './auto-quotation.dto'
+import {
+  CREATE_QUOTATION,
+  GET_CONTACT,
+  GET_KANBAN_STAGE,
+  GET_PROMOTION,
+  GET_UNIT,
+  INSERT_CONTACT,
+  INSERT_DEAL,
+} from './gql'
 
 @Injectable()
 export class AutoQuotationService {
@@ -16,131 +27,6 @@ export class AutoQuotationService {
         },
       }),
     )
-  }
-
-  async getContact(autoQuotationInputDto: AutoQuotationInputDto): Promise<any> {
-    const sql = {
-      query: `
-      query getContact($email: string) {
-        customers(where: {email: {_eq: "${autoQuotationInputDto.email}"}}) {
-          id
-          first_name
-          last_name
-          email
-          contact_number
-          lead_origin
-          rental_purpose 
-        }
-      }
-      `,
-    }
-
-    return await this.sendPost(sql)
-  }
-
-  async createContact(customerDto: CustomerDto): Promise<any> {
-    const sql = {
-      query: `
-      mutation InsertCustomers {
-        insert_customers_one(object: {
-          first_name: "${customerDto.first_name}"
-          last_name: "${customerDto.last_name}" 
-          email: "${customerDto.email}"
-          contact_number: "${customerDto.contact_number}"
-          lead_origin: "${customerDto.lead_origin}"
-          rental_purpose: "${customerDto.rentalPurpose}"
-        }){
-            id
-            first_name
-            last_name
-            email
-            contact_number
-            lead_origin
-            rental_purpose      
-        }
-      }
-      `,
-    }
-
-    return await this.sendPost(sql)
-  }
-
-  async getUnit(
-    building_id: number,
-    unit_type_id: number,
-    duration: number,
-  ): Promise<any> {
-    const sql = {
-      query: `
-      query GetUnit() {
-        units(where: {unit_subtype: {unit_type_id: {_eq: "${unit_type_id}"}, _and: {building_id: {_eq: "${building_id}"}}}, _and: {min_rent_days: {_lte: "${duration}"}}}, order_by: {unit_subtype: {price_per_month: asc}}, limit: 1) {
-          id
-          unit_subtype {
-            unit_type_id
-            building_id
-            price_per_month
-            id
-            building {
-              company_id
-            }
-          }
-          unit_subtype_id
-          name_en
-          name_th
-          description_en
-          description_th
-          availability_status
-          access_status
-          min_rent_days
-          status
-        }
-      }
-      `,
-    }
-
-    return await this.sendPost(sql)
-  }
-
-  async getKanbanStage(company_id: number): Promise<any> {
-    const sql = {
-      query: `
-      query GetKanbanStage {
-        kanban_stages(where: {name_en: {_eq: ""}, name_th: {_eq: ""}, company_id: {_eq: "${company_id}"}}) {
-          id
-        }
-      }
-      `,
-    }
-
-    return await this.sendPost(sql)
-  }
-
-  async insertKanbanStageOne(company_id: number): Promise<any> {
-    const sql = {
-      query: `
-      mutation InsertKanbanStagesOne {
-        insert_kanban_stages_one(object: {company_id: "${company_id}", deal_status: "OPEN", name_en: "", name_th: ""}) {
-          id
-        }
-      }
-      `,
-    }
-
-    return await this.sendPost(sql)
-  }
-
-  async insertDealOne(company_id: number, customer_id: number): Promise<any> {
-    const sql = {
-      query: `
-      mutation InsertDealOne {
-        insert_deals_one(object: {company_id: "${company_id}", customer_id: "${customer_id}", status: "OPEN"}) {
-          id
-        }
-      }
-      `,
-    }
-
-    return await this.sendPost(sql)
   }
 
   async insertQuotationOne(
@@ -166,60 +52,113 @@ export class AutoQuotationService {
   }
 
   async create(autoQuotationInputDto: AutoQuotationInputDto): Promise<any> {
-    // Get Contact with provided email
     const building_id: number = autoQuotationInputDto.building_id
-    let customer: CustomerDto
+    const unit_type_id: number = autoQuotationInputDto.unit_type_id
+    const duration: number = autoQuotationInputDto.duration * 30
+    const email: string = autoQuotationInputDto.email
+    const username: string = autoQuotationInputDto.username
+    const contact_number: string = autoQuotationInputDto.contact_number
+    const lead_origin: string = autoQuotationInputDto.lead_origin
+    const rental_purpose: string = autoQuotationInputDto.notes
+    const nameParts: string[] = username.split(' ')
+    let customer: CustomerDto = new CustomerDto()
+    let first_name: string, last_name: string
 
-    const result = await this.getContact(autoQuotationInputDto)
-
-    if (result.data.errrors) {
-      return result.data.errrors
+    // Get first_name and last_name from username
+    if (nameParts.length > 1) {
+      first_name = nameParts.slice(0, -1).join(' ')
+      last_name = nameParts[nameParts.length - 1]
+    } else {
+      first_name = username
+      last_name = ''
     }
 
-    console.log('result.data = ', result.data)
+    // Get Contact with provided email
+    let result = await graphQuery(GET_CONTACT, { email })
+    if (!result.data.customers) throw new NotFoundError('GET_CONTACT_ERROR')
 
     // if multiple customers exist then raise error
-    if (result.data.data.customers.length > 1) {
-      return 'There are multiple customers using the email.'
-    } else if (result.data.data.customers.length == 1) {
-      // There is only one customer using the email
-      customer = result.data.data.customers[0]
+    if (result.data.customers.length > 1) {
+      throw new NotFoundError('MULTI_CONTACTS_ERROR')
+    } else if (result.data.customers.length == 1) {
+      // There is only one customer with the email
+      customer = result.data.customers[0]
     } else {
-      // If there is no customers using the email, then create new customer with the email.
-      const nameParts: string[] = autoQuotationInputDto.username.split(' ')
-      let customerDto: CustomerDto = new CustomerDto()
+      // If there is no customers with the email, then create new customer with the email.
 
-      if (nameParts.length > 1) {
-        customerDto.first_name = nameParts.slice(0, -1).join(' ')
-        customerDto.last_name = nameParts[nameParts.length - 1]
-      } else {
-        customerDto.first_name = autoQuotationInputDto.username
-        customerDto.last_name = ''
-      }
-      customerDto.email = autoQuotationInputDto.email
-      customerDto.contact_number = autoQuotationInputDto.contact_number
-      customerDto.lead_origin = autoQuotationInputDto.lead_origin
-      customerDto.rentalPurpose = autoQuotationInputDto.notes
+      // const result = await this.createContact(customer)
+      result = await graphQuery(INSERT_CONTACT, {
+        first_name,
+        last_name,
+        email,
+        contact_number,
+        lead_origin,
+        rental_purpose,
+      })
 
-      const result_2 = await this.createContact(customerDto)
-      console.log(result_2.data)
-      if (result_2.data.errors) {
-        return 'Creating Contact failed'
-      }
-      customer = result_2.data.data.insert_customers_one
+      if (!result.data.insert_customers_one)
+        throw new NotFoundError('INSERT_CONTACT_ERROR')
+
+      customer = result.data.insert_customers_one
     }
 
     // Get the cheapest Unit
-    console.log('building_id = ', building_id)
+    result = await graphQuery(GET_UNIT, { unit_type_id, building_id, duration })
+    if (!result.data.units) throw new NotFoundError('GET_UNIT_ERROR')
+    const company_id = result.data.units[0].unit_subtype.building.company_id
+    const unit_subtype_id = result.data.units[0].unit_subtype_id
 
-    return customer
+    // Get the kanban stage
+    result = await graphQuery(GET_KANBAN_STAGE, { company_id })
+    if (!result.data.kanban_stages || result.data.kanban_stages.length == 0)
+      throw new NotFoundError('GET_KANBAN_STAGE_ERROR')
+
+    const kanban_stages_id = result.data.kanban_stages[0].id
+    const customer_id = customer.id
+
+    // Insert Deal
+    result = await graphQuery(INSERT_DEAL, { company_id, customer_id })
+    if (!result.data.insert_deals_one)
+      throw new NotFoundError('INSERT_DEAL_ERROR')
+
+    const deal_id = result.data.insert_deals_one.id
+    const due_date: string = new Date('2021-11-11').toUTCString()
+    let tmr: Date = new Date()
+    tmr.setUTCDate(tmr.getUTCDate() + 1)
+    tmr.setUTCHours(0, 0, 0)
+
+    const move_in_date: string = tmr.toUTCString()
+    tmr.setUTCDate(tmr.getUTCDate() + duration)
+
+    const move_out_date: string = tmr.toUTCString()
+    console.log('date = ', move_out_date)
+
+    // Get Promotion Code
+    result = await graphQuery(GET_PROMOTION, {
+      start_date: move_in_date,
+      end_date: move_out_date,
+    })
+    if (!result.data.promotions) throw new NotFoundError('GET_PROMOTION_ERROR')
+
+    const promotion_id: number = result.data.promotions[0].id
+    console.log('promotion_id = ', promotion_id)
+
+    // Create Quotation
+    result = await graphQuery(CREATE_QUOTATION, {
+      due_date,
+      deal_id,
+      company_id,
+      building_id,
+      unit_subtype_id,
+      customer_id,
+      move_in_date,
+      promotion_id,
+    })
+    if (!result.data.insert_quotations_one)
+      throw new NotFoundError('CREATE_QUOTATION_ERROR')
+
+    const quotation_id = result.data.insert_quotations_one.id
+
+    return quotation_id
   }
 }
-
-//  ------------- Get Kanban Stage ------------------
-
-// -------------  Insert Kanban Stage -----------------
-
-// --------------  Insert Deal One -------------
-
-// --------------  Insert Quotation One  ---------------
