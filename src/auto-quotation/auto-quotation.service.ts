@@ -29,27 +29,27 @@ export class AutoQuotationService {
     )
   }
 
-  async insertQuotationOne(
-    due_date: Date,
-    deal_id: number,
-    company_id: number,
-    building_id: number,
-    unit_subtype_id: number,
-    customer_id: number,
-    move_in_date: Date,
-  ): Promise<any> {
-    const sql = {
-      query: `
-      mutation InsertQuotationOne {
-        insert_quotations_one(object: {due_date: "${due_date}", deal_id: "${deal_id}", company_id: "${company_id}", status: "PENDING", building_id: "${building_id}", unit_subtype_id: "${unit_subtype_id}", customer_id: "${customer_id}", move_in_date: "${move_in_date}"}) {
-          id
-        }
-      }
-      `,
-    }
+  // async insertQuotationOne(
+  //   due_date: Date,
+  //   deal_id: number,
+  //   company_id: number,
+  //   building_id: number,
+  //   unit_subtype_id: number,
+  //   customer_id: number,
+  //   move_in_date: Date,
+  // ): Promise<any> {
+  //   const sql = {
+  //     query: `
+  //     mutation InsertQuotationOne {
+  //       insert_quotations_one(object: {due_date: "${due_date}", deal_id: "${deal_id}", company_id: "${company_id}", status: "PENDING", building_id: "${building_id}", unit_subtype_id: "${unit_subtype_id}", customer_id: "${customer_id}", move_in_date: "${move_in_date}"}) {
+  //         id
+  //       }
+  //     }
+  //     `,
+  //   }
 
-    return await this.sendPost(sql)
-  }
+  //   return await this.sendPost(sql)
+  // }
 
   async create(autoQuotationInputDto: AutoQuotationInputDto): Promise<any> {
     const building_id: number = autoQuotationInputDto.building_id
@@ -122,14 +122,16 @@ export class AutoQuotationService {
       throw new NotFoundError('INSERT_DEAL_ERROR')
 
     const deal_id = result.data.insert_deals_one.id
-    const due_date: string = new Date('2021-11-11').toUTCString()
     let tmr: Date = new Date()
     tmr.setUTCDate(tmr.getUTCDate() + 1)
     tmr.setUTCHours(0, 0, 0)
 
     const move_in_date: string = tmr.toUTCString()
-    tmr.setUTCDate(tmr.getUTCDate() + duration)
 
+    tmr.setUTCDate(tmr.getUTCDate() + 6)
+    const due_date: string = tmr.toUTCString()
+
+    tmr.setUTCDate(tmr.getUTCDate() + duration - 7)
     const move_out_date: string = tmr.toUTCString()
     console.log('date = ', move_out_date)
 

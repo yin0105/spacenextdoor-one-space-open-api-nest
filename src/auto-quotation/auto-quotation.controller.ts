@@ -21,8 +21,8 @@ export class AutoQuotationController {
     const result = await this.autoQuotationService.create(autoQuotationInputDto)
 
     const args = {
-      subject: 'customSubject',
-      body: 'customBody',
+      subject: 'Here is your quotation',
+      body: 'Please find your quotation attached',
       attachments: null,
     }
     await notificationService.sendCustomEmail(
