@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Req } from '@nestjs/common'
 import { NotificationService } from '@space-next-door/onslib/dist/modules/notification'
 import { Request } from 'express'
-import { AutoQuotationInputDto } from './auto-quotation.dto'
 import { AutoQuotationService } from './auto-quotation.service'
+import { AutoQuotationInputDto } from './dto/auto-quotation.dto'
 
 @Controller('auto-quotation')
 export class AutoQuotationController {

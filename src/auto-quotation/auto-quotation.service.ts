@@ -14,7 +14,7 @@ import {
   GET_PROMOTION,
   GET_UNIT,
 } from '../graphql/query/auto-quotation.query'
-import { AutoQuotationInputDto, CustomerDto } from './auto-quotation.dto'
+import { AutoQuotationInputDto, CustomerDto } from './dto/auto-quotation.dto'
 
 @Injectable()
 export class AutoQuotationService {
